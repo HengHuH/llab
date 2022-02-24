@@ -1,0 +1,10 @@
+ninja_required_version  = 1.1
+
+defines = -DUNICODE
+cflags = -Wall
+out_dir = ./out
+
+rule llab
+  command = gcc $cflags $defines -o $out_dir/$out $in
+
+build llab.exe: llab src/llab.c
