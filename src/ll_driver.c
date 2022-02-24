@@ -4,13 +4,22 @@
 
 #include "ll_driver.h"
 
-static int quit = 0;
+#define CLASS_NAME L"HENG_LLAB"
+#define TITLE_NAME L"LLab"
+
+struct Window {
+    HWND hwnd;
+    int should_close;
+}window;
+
+int w = 900;
+int h = 600;
 
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if (msg == WM_DESTROY)
     {
-        quit = 1;
+        window.should_close = 1;
     }
     return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
@@ -30,7 +39,7 @@ void ll_driver_run()
         .hCursor = LoadCursor(NULL, IDC_ARROW),
         .hbrBackground = NULL,
         .lpszMenuName = NULL,
-        .lpszClassName = L"Heng",
+        .lpszClassName = CLASS_NAME,
         .hIconSm = NULL};
 
     if (!RegisterClassEx(&wcex))
@@ -41,10 +50,10 @@ void ll_driver_run()
 
     HWND hwnd = CreateWindowEx(
         0,
-        L"Heng",
-        L"Hlab",
+        CLASS_NAME,
+        TITLE_NAME,
         (WS_OVERLAPPEDWINDOW | WS_CAPTION | WS_BORDER),
-        0, 0, 900, 600,
+        0, 0, w, h,
         NULL,
         NULL,
         hInstance,
@@ -55,11 +64,13 @@ void ll_driver_run()
         MessageBox(NULL, L"Failed to create window.", L"Error", MB_OK);
         ExitProcess(127);
     }
+    window.should_close = 0;
+    window.hwnd = hwnd;
     ShowWindow(hwnd, SW_SHOW);
 
     // RUN
     MSG msg = {0};
-    while (!quit)
+    while (!window.should_close)
     {
         while (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE) != 0)
         {
