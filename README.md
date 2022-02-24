@@ -8,12 +8,11 @@ target cpu: x64
 
 language: lua 5.4, C89
 
-dependency: ninja 1.10
+compiler: MinGW64 gcc 8.1
 
-toolchain: MinGW64 gcc 8.1
+dependency: ninja 1.10
 
 ---
 **building:**
 
-> lua configure.lua  
-> ninja -C out
+> ninja

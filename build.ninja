@@ -1,10 +1,20 @@
+# This file is used to build llab
+
 ninja_required_version  = 1.1
 
+cflags = -Wall -Werror
 defines = -DUNICODE
-cflags = -Wall
-out_dir = ./out
+include_dirs =
+libs_dirs =
+libs =
 
-rule llab
-  command = gcc $cflags $defines -o $out_dir/$out $in
+rule cc
+  command = gcc ${defines} ${include_dirs} ${cflags} -c ${in} -o ${out}
+  description = CC ${out}
 
-build llab.exe: llab src/llab.c
+rule link
+  command = gcc ${libs_dirs} ${libs} -o ${out} ${in}
+  description = LINK ${out}
+
+build out/llab.o: cc src/llab.c
+build out/llab.exe: link out/llab.o
