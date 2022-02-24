@@ -18,7 +18,11 @@ rule link
   command = gcc ${libs_dirs} ${libs} -o ${out} ${in}
   description = LINK ${out}
 
+rule rc
+  command = windres -i ${in} -o ${out}
+
 build out/llab.o: cc src/llab.c
 build out/ll_driver.o: cc src/ll_driver.c
+build out/llab.rc.o: rc src/llab.rc
 
-build out/llab.exe: link out/llab.o out/ll_driver.o
+build out/llab.exe: link out/llab.o out/ll_driver.o out/llab.rc.o

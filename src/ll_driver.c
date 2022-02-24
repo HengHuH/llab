@@ -3,14 +3,16 @@
 #include <Windows.h>
 
 #include "ll_driver.h"
+#include "resource.h"
 
 #define CLASS_NAME L"HENG_LLAB"
 #define TITLE_NAME L"LLab"
 
-struct Window {
+struct Window
+{
     HWND hwnd;
     int should_close;
-}window;
+} window;
 
 int w = 900;
 int h = 600;
@@ -27,6 +29,7 @@ static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 void ll_driver_run()
 {
     HINSTANCE hInstance = (HINSTANCE)GetModuleHandle(NULL);
+    const HICON icon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_MAIN));
 
     WNDCLASSEX wcex = {
         .cbSize = sizeof(WNDCLASSEXW),
@@ -35,12 +38,12 @@ void ll_driver_run()
         .cbClsExtra = 0,
         .cbWndExtra = 0,
         .hInstance = hInstance,
-        .hIcon = NULL,
+        .hIcon = icon,
         .hCursor = LoadCursor(NULL, IDC_ARROW),
         .hbrBackground = NULL,
         .lpszMenuName = NULL,
         .lpszClassName = CLASS_NAME,
-        .hIconSm = NULL};
+        .hIconSm = icon};
 
     if (!RegisterClassEx(&wcex))
     {
@@ -64,6 +67,7 @@ void ll_driver_run()
         MessageBox(NULL, L"Failed to create window.", L"Error", MB_OK);
         ExitProcess(127);
     }
+
     window.should_close = 0;
     window.hwnd = hwnd;
     ShowWindow(hwnd, SW_SHOW);
