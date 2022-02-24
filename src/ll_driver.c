@@ -3,7 +3,6 @@
 #include <Windows.h>
 
 #include "ll_driver.h"
-#include "resource.h"
 
 #define CLASS_NAME L"HENG_LLAB"
 #define TITLE_NAME L"LLab"
@@ -14,9 +13,6 @@ struct Window
     int should_close;
 } window;
 
-int w = 900;
-int h = 600;
-
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if (msg == WM_DESTROY)
@@ -26,10 +22,9 @@ static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
     return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
 
-void ll_driver_run()
+static HWND create_window(const WCHAR *class_name, const WCHAR *title_name, const HICON icon, int w, int h)
 {
     HINSTANCE hInstance = (HINSTANCE)GetModuleHandle(NULL);
-    const HICON icon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_MAIN));
 
     WNDCLASSEX wcex = {
         .cbSize = sizeof(WNDCLASSEXW),
@@ -42,7 +37,7 @@ void ll_driver_run()
         .hCursor = LoadCursor(NULL, IDC_ARROW),
         .hbrBackground = NULL,
         .lpszMenuName = NULL,
-        .lpszClassName = CLASS_NAME,
+        .lpszClassName = class_name,
         .hIconSm = icon};
 
     if (!RegisterClassEx(&wcex))
@@ -53,8 +48,8 @@ void ll_driver_run()
 
     HWND hwnd = CreateWindowEx(
         0,
-        CLASS_NAME,
-        TITLE_NAME,
+        class_name,
+        title_name,
         (WS_OVERLAPPEDWINDOW | WS_CAPTION | WS_BORDER),
         0, 0, w, h,
         NULL,
@@ -69,9 +64,16 @@ void ll_driver_run()
     }
 
     window.should_close = 0;
-    window.hwnd = hwnd;
-    ShowWindow(hwnd, SW_SHOW);
+    ShowWindow(hwnd, SW_HIDE);
 
+    return hwnd;
+}
+
+void ll_driver_run(const WCHAR *class_name, const WCHAR *title_name, const HICON icon)
+{
+    window.hwnd = create_window(class_name, title_name, icon, 900, 600);
+
+    ShowWindow(window.hwnd, SW_SHOW);
     // RUN
     MSG msg = {0};
     while (!window.should_close)

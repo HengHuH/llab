@@ -2,5 +2,7 @@
 
 #pragma once
 
+#include <Windows.h>
+
 // run driver, create window and render contxt.
-void ll_driver_run();
+void ll_driver_run(const WCHAR* class_name, const WCHAR* title_name, const HICON icon);
