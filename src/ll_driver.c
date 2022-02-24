@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 
+#include "ll_client.h"
 #include "ll_driver.h"
 
 #define CLASS_NAME L"HENG_LLAB"
@@ -17,7 +18,7 @@ static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 {
     if (msg == WM_DESTROY)
     {
-        window.should_close = 1;
+        ll_client_mark_close();
     }
     return DefWindowProcW(hwnd, msg, wParam, lParam);
 }
@@ -72,22 +73,7 @@ static HWND create_window(const WCHAR *class_name, const WCHAR *title_name, cons
 void ll_driver_run(const WCHAR *class_name, const WCHAR *title_name, const HICON icon)
 {
     window.hwnd = create_window(class_name, title_name, icon, 900, 600);
-
     ShowWindow(window.hwnd, SW_SHOW);
-    // RUN
-    MSG msg = {0};
-    while (!window.should_close)
-    {
-        while (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE) != 0)
-        {
-            if (msg.message == WM_DESTROY)
-            {
-                PostQuitMessage(0);
-                break;
-            }
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
-        SleepEx(0, TRUE);
-    }
+    // ll_client_preinit();
+    ll_client_run();
 }

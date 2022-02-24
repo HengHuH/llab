@@ -1,3 +1,5 @@
+// This file is a part of llab.
+
 #include <stdio.h>
 
 #include <Windows.h>

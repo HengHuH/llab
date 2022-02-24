@@ -21,8 +21,11 @@ rule link
 rule rc
   command = windres -i ${in} -o ${out}
 
+build out/llab.rc.o: rc src/llab.rc
 build out/llab.o: cc src/llab.c
 build out/ll_driver.o: cc src/ll_driver.c
-build out/llab.rc.o: rc src/llab.rc
+build out/ll_engine.o: cc src/ll_engine.c
+build out/ll_client.o: cc src/ll_client.c
 
-build out/llab.exe: link out/llab.o out/ll_driver.o out/llab.rc.o
+
+build out/llab.exe: link out/llab.o out/ll_driver.o out/llab.rc.o out/ll_engine.o out/ll_client.o
