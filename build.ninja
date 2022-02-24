@@ -2,9 +2,11 @@
 
 ninja_required_version  = 1.1
 
-cflags = -Wall -Werror
+cflags = -g -O2 -Wall
 defines = -DUNICODE
 include_dirs =
+
+arflags = 
 libs_dirs =
 libs =
 
@@ -17,4 +19,6 @@ rule link
   description = LINK ${out}
 
 build out/llab.o: cc src/llab.c
-build out/llab.exe: link out/llab.o
+build out/ll_driver.o: cc src/ll_driver.c
+
+build out/llab.exe: link out/llab.o out/ll_driver.o
