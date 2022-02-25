@@ -43,11 +43,11 @@ function writer:newline()
 end
 
 function writer:variable(key, value, indent)
-    self:line(string.format("%s = %s", key, value), indent)
+    self:_line(string.format("%s = %s", key, value), indent)
 end
 
 function writer:rule(name, command, description)
-    self:line("rule " .. name)
+    self:_line("rule " .. name)
     self:variable("command", command, 1)
     if description ~= nil then
         self:variable("description", description, 1)
@@ -55,10 +55,14 @@ function writer:rule(name, command, description)
 end
 
 function writer:build(output, rule, input)
-    self:line(string.format("build %s: %s %s", output, rule, input))
+    self:_line(string.format("build %s: %s %s", output, rule, input))
 end
 
-function writer:line(text, indent)
+function writer:default(...)
+    self:_line(string.format('default %s', table.concat({...}, " ")))
+end
+
+function writer:_line(text, indent)
     if indent == nil then
         indent = 0
     end
@@ -147,6 +151,10 @@ local function gen(rules, target, writer)
 
     local tn = target.name .. ".exe"
     w:build(tn, "link", table.concat(deps, " "))
+
+    -- default
+    w:newline()
+    w:default(tn)
 end
 
 local function main()
