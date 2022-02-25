@@ -190,20 +190,29 @@ local function declare()
         description = "CC ${out}"
     })
     table.insert(tools, {
-        name = "link",
-        command = "gcc ${libs_dirs} ${libs} -o ${out} ${in}",
-        description = "LINK ${out}"
-    })
-    table.insert(tools, {
-        name = "alink",
-        command = "gcc ",
-        description = "ALINK ${out}"
-    })
-    table.insert(tools, {
         name = "rc",
         command = "windres -i ${in} -o ${out}",
         description = "RC ${out}"
     })
+    table.insert(tools, {
+        name = "alink",
+        command = "ar rcs ${arflags} ${out} ${in} ",
+        description = "ALINK ${out}"
+    })
+    table.insert(tools, {
+        name = "solink",
+        command = "gcc -shared ${ldflags}",
+        description = "SOLINK ${out}"
+    })
+    table.insert(tools, {
+        name = "link",
+        command = "gcc ${libs_dirs} ${libs} -o ${out} ${in}",
+        description = "LINK ${out}"
+    })
+    -- table.insert(tools, {
+    --     name = "stamp",
+    --     command = "stamp"
+    -- })
 
     -- attributes
     lgn:declare_variable("ninja_required_version", "1.10")
